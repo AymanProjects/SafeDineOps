@@ -36,16 +36,14 @@ class _AuthScreenState extends State<AuthScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
+              margin: EdgeInsets.only(top: 35),
               height: (MediaQuery.of(context).size.height -
                       MediaQuery.of(context).padding.top) *
                   0.2,
-              child: Padding(
-                  padding: EdgeInsets.only(top: 0),
-                  child: AppLogo(
-                    color:
-                        Provider.of<AppTheme>(context, listen: false).primary,
-                    size: 80,
-                  )),
+              child: AppLogo(
+                color: Provider.of<AppTheme>(context, listen: false).primary,
+                size: 80,
+              ),
             ),
             Container(
                 width: double.infinity,

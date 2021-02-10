@@ -13,10 +13,14 @@ void main() async {
     ),
     null,
   );
+  runApp(App());
+}
 
-  runApp(
-    AppStyleConfiguration(
+class App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AppStyleConfiguration(
       child: AuthScreen(),
-    ),
-  );
+    );
+  }
 }

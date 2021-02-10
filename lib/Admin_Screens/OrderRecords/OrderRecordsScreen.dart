@@ -7,25 +7,28 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class OrderHistory extends StatelessWidget {
+class OrderRecordsScreen extends StatelessWidget {
+  final String branchID;
+  OrderRecordsScreen({@required this.branchID});
   @override
   Widget build(BuildContext context) {
     return GlobalScaffold(
       hasDrawer: false,
-      title: 'Order History',
-      body: getUserHistory(),
+      title: 'Order Records',
+      body: showRecords(context),
     );
   }
 
-  Widget getUserHistory({context, String userID}) {
-    return StreamBuilder<List<Order>>(
-      stream: Database.getAllOrdersOfVisitor(visitorID: userID),
+  Widget showRecords(context) {
+    return FutureBuilder<List<Order>>(
+      initialData: [],
+      future: Database.getAllOrdersOfBranch(branchID),
       builder: (_, AsyncSnapshot<List<Order>> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.length > 0)
-            return showHistoryOrders(snapshot.data);
+            return recordsList(snapshot.data);
           else
-            return showEmptyHistory();
+            return showEmptyRecords();
         } else {
           return Expanded(child: Center(child: CircularProgressIndicator()));
         }
@@ -33,7 +36,7 @@ class OrderHistory extends StatelessWidget {
     );
   }
 
-  Widget showHistoryOrders(List<Order> orders) {
+  Widget recordsList(List<Order> orders) {
     return Expanded(
       child: ListView.separated(
         padding: EdgeInsets.only(right: 15.w, left: 15.w, top: 15, bottom: 85),
@@ -42,7 +45,7 @@ class OrderHistory extends StatelessWidget {
         ),
         itemCount: orders.length,
         itemBuilder: (context, index) {
-          return orderHistoryCard(
+          return recordCard(
               context: context,
               index: orders.length - index,
               order: orders[index]);
@@ -51,7 +54,7 @@ class OrderHistory extends StatelessWidget {
     );
   }
 
-  Widget orderHistoryCard({context, int index, Order order}) {
+  Widget recordCard({context, int index, Order order}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -135,11 +138,11 @@ class OrderHistory extends StatelessWidget {
     return names;
   }
 
-  Widget showEmptyHistory() {
+  Widget showEmptyRecords() {
     return Expanded(
       child: Center(
         child: Text(
-          'There are no orders in your history',
+          'There are no order records',
           style: TextStyle(color: Colors.grey),
         ),
       ),

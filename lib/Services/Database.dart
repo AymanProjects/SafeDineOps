@@ -74,7 +74,8 @@ class Database {
     });
   }
 
-  static Future<List<Branch>> getBranchesOfRestaurant(String restaurantID) async {
+  static Future<List<Branch>> getBranchesOfRestaurant(
+      String restaurantID) async {
     List<Branch> branches = await Firestore.instance
         .collection(branchesCollection)
         .where('restaurantID', isEqualTo: restaurantID)
@@ -88,5 +89,23 @@ class Database {
         return [];
     });
     return branches;
+  }
+
+  static Future<List<Order>> getAllOrdersOfBranch(String branchID) async {
+    print(branchID);
+    List<Order> orders = await Firestore.instance
+        .collection(ordersCollection)
+        .where('branchID', isEqualTo: branchID)
+        .orderBy('date', descending: true)
+        .getDocuments()
+        .then((QuerySnapshot queryResult) {
+      if (queryResult.documents.isNotEmpty)
+        return queryResult.documents.map((DocumentSnapshot document) {
+          return Order().fromJson(document.data);
+        }).toList();
+      else
+        return [];
+    });
+    return orders;
   }
 }

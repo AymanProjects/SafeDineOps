@@ -1,15 +1,12 @@
-import 'package:SafeDineOps/Admin_Screens/ManageMenu/AddItemScreen.dart';
+import 'package:SafeDineOps/Admin_Screens/OrderRecords/OrderRecordsScreen.dart';
 import 'package:SafeDineOps/Models/Branch.dart';
-import 'package:SafeDineOps/Models/Category.dart';
 import 'package:SafeDineOps/Models/FoodItem.dart';
-import 'package:SafeDineOps/Models/Restaurant.dart';
 import 'package:SafeDineOps/Services/Database.dart';
 import 'package:SafeDineOps/Services/FirebaseException.dart';
 import 'package:SafeDineOps/Widgets/SafeDineSnackBar.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 
 class BranchTile extends StatefulWidget {
   final Branch branch;
@@ -35,6 +32,23 @@ class _BranchTileState extends State<BranchTile> {
       children: [
         Text(widget.branch.getName()),
         Spacer(),
+        InkWell(
+          child: Icon(
+            Icons.info_outline,
+            size: 20,
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => OrderRecordsScreen(
+                  branchID: widget.branch.getID(),
+                ),
+              ),
+            );
+          },
+        ),
+        SizedBox(width: 15),
         InkWell(
           child: Icon(
             Icons.edit_outlined,
@@ -100,21 +114,6 @@ class _BranchTileState extends State<BranchTile> {
           },
         ),
       ],
-    );
-  }
-
-  Widget _item(FoodItem item) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        bottom: 10,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(item.getName()),
-          Text(item.getPrice().toStringAsFixed(2)),
-        ],
-      ),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:ui';
+import 'package:SafeDineOps/Admin_Screens/OrderRecords/OrderRecordsScreen.dart';
 import 'package:SafeDineOps/Models/Restaurant.dart';
 import 'package:SafeDineOps/Admin_Screens/Home/widgets/DrawerTile.dart';
-import 'package:SafeDineOps/Admin_Screens/OrderHistory/OrderHistoryScreen.dart';
 import 'package:SafeDineOps/Utilities/AppTheme.dart';
 import 'package:SafeDineOps/Widgets/AppLogo.dart';
 import 'package:SafeDineOps/Widgets/SafeDineButton.dart';
@@ -51,7 +51,7 @@ class SafeDineDrawer extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => OrderHistory()),
+                                builder: (context) => OrderRecordsScreen()),
                           );
                         },
                       )
@@ -77,16 +77,16 @@ class SafeDineDrawer extends StatelessWidget {
   }
 
   Widget logoutButton(context) {
-    Restaurant res = Provider.of<Restaurant>(context, listen: false);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: SafeDineButton(
         color: Colors.redAccent,
         fontSize: 14.sp,
         text: 'Logout',
-        function: () {
-          res.logout();
-          Navigator.of(context).pop();
+        function: () async {
+          await Provider.of<Restaurant>(context, listen: false).logout();
+          // pop to first rout in stack
+          Navigator.of(context).popUntil((route) => route.isFirst);
         },
       ),
     );

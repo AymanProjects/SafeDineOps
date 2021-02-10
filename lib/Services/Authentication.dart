@@ -16,8 +16,11 @@ class Authentication {
 
   static Future<void> login(Account account) async {
     try {
-      await _authInstance.signInWithEmailAndPassword(
-          email: account.getEmail(), password: account.getPassword());
+      await _authInstance
+          .signInWithEmailAndPassword(
+              email: account.getEmail(), password: account.getPassword())
+          .then((AuthResult result) =>
+              (account as DatabaseModel).setID(result.user.uid));
     } catch (exception) {
       signOut(); // so the user can login again
       rethrow;
