@@ -24,8 +24,8 @@ class OrderRecordsScreen extends StatelessWidget {
       initialData: [],
       future: Database.getAllOrdersOfBranch(branchID),
       builder: (_, AsyncSnapshot<List<Order>> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0)
+        if (snapshot.connectionState == ConnectionState.done) {
+           if (snapshot.data.length > 0)
             return recordsList(snapshot.data);
           else
             return showEmptyRecords();

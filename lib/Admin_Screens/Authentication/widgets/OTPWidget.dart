@@ -127,7 +127,9 @@ class _OTPWidgetState extends State<OTPWidget> {
               function: () {
                 if (formKey.currentState.validate() &&
                     widget.otpCode == currentText) {
-                      Restaurant restaurant = Provider.of<Restaurant>(context, listen: false);
+                  Restaurant restaurant =
+                      Provider.of<Restaurant>(context, listen: false);
+                  Navigator.pop(context);
                   Navigator.push(
                     context,
                     FadeRouteAnimation(
