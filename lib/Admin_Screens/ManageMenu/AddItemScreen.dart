@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'widgets/AddOnsList.dart';
 
 class AddItemScreen extends StatefulWidget {
   final Category category;
@@ -79,6 +80,9 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         onChanged: (value) =>
                             foodItem.setPrice(double.tryParse(value)),
                       ),
+                      AddOnsList(
+                        addons: foodItem.getAddOns(),
+                      ),
                       SizedBox(height: 20),
                       BorderedButton(
                         text: 'Add Item',
@@ -114,6 +118,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           });
                         },
                       ),
+                      SizedBox(height: 20),
                     ],
                   ),
                 ),
