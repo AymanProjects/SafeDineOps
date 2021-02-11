@@ -28,7 +28,7 @@ class FoodItem {
       'addOns': getAddOns().map((addon) {
             return addon?.toJson();
           }).toList(),
-      'imageUrl': getUrl(),
+      'imageUrl': _imageUrl,
     };
   }
 
@@ -45,7 +45,7 @@ class FoodItem {
     );
   }
 
-  List<AddOn> getAddOns() => _addOns ?? [];
+  List<AddOn> getAddOns() => _addOns ?? (_addOns = []);
   String getDescription() => _description ?? 'No Additional Info.';
   double getPrice() => _price ?? 0.00;
   String getName() => _name ?? 'Unnamed Item';

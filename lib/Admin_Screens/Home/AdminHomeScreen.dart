@@ -19,27 +19,32 @@ class AdminHomeScreen extends StatelessWidget {
         title: 'Welcome',
         hasDrawer: true,
         drawer: SafeDineDrawer(),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 50),
-              BorderedButton(
-                text: 'Manage menu',
-                function: () => pushToScreen(ManageMenuScreen(), context),
-              ),
-              SizedBox(height: 15),
-              BorderedButton(
-                text: 'Manage branches',
-                function: () => pushToScreen(ManageBranchScreen(), context),
-              ),
-              SizedBox(height: 15),
-              BorderedButton(
-                text: 'Create QR for table',
-                function: () => pushToScreen(CreateQRScreen(), context),
-              ),
-            ],
+        body: Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                BorderedButton(
+                  text: 'Manage menu',
+                  function: () => pushToScreen(ManageMenuScreen(), context),
+                ),
+                SizedBox(height: 15),
+                BorderedButton(
+                  text: 'Manage branches',
+                  function: () => pushToScreen(ManageBranchScreen(), context),
+                ),
+                SizedBox(height: 15),
+                BorderedButton(
+                  text: 'Create QR for table',
+                  function: () => pushToScreen(CreateQRScreen(), context),
+                ),
+                SizedBox(
+                  // to center buttons
+                  height: MediaQuery.of(context).size.height * 0.2,
+                ),
+              ],
+            ),
           ),
         ),
       ),

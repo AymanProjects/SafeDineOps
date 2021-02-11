@@ -4,7 +4,7 @@ class Category {
   String _name;
   List<FoodItem> _items;
 
-  Category({String name, List<FoodItem> items}){
+  Category({String name, List<FoodItem> items}) {
     this._name = name;
     this._items = items;
   }
@@ -18,7 +18,7 @@ class Category {
     };
   }
 
-  Category fromJson(Map json){
+  Category fromJson(Map json) {
     if (json == null) return Category();
     return new Category(
       name: json['name'],
@@ -28,14 +28,14 @@ class Category {
     );
   }
 
-  List<FoodItem> getItems() => _items ?? [];
+  List<FoodItem> getItems() => _items ?? (_items = []);
   String getName() => _name ?? 'Unnamed category';
 
   setAddOns(List<FoodItem> value) {
     _items = value;
   }
+
   setName(String value) {
     _name = value;
   }
-
 }

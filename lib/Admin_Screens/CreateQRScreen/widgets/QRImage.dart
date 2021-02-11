@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:SafeDineOps/Models/Restaurant.dart';
 import 'package:SafeDineOps/Widgets/SafeDineSnackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
@@ -25,18 +26,24 @@ class QRImageState extends State<QRImage> {
 
   Future<void> saveImage() async {
     if (await Permission.storage.request().isGranted) {
-      Response response = await Dio().get(
-        "https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=$content",
-        options: Options(responseType: ResponseType.bytes),
-      );
-      await ImageGallerySaver.saveImage(
-        Uint8List.fromList(response.data),
-        quality: 100,
-      );
-      SafeDineSnackBar.showNotification(
-          type: SnackbarType.Success,
+      try {
+        List<int> image = await Restaurant().createTableQR(content);
+        await ImageGallerySaver.saveImage(
+          Uint8List.fromList(image),
+          quality: 100,
+        );
+        SafeDineSnackBar.showNotification(
+            type: SnackbarType.Success,
+            context: context,
+            msg: 'Image Downloaded to Gallery');
+        Navigator.pop(context);
+      } on DioError catch (exception) {
+        SafeDineSnackBar.showNotification(
+          type: SnackbarType.Error,
           context: context,
-          msg: 'Image Downloaded to Gallery');
+          msg: 'Network error',
+        );
+      }
     } else if (await Permission.storage.isPermanentlyDenied) {
       SafeDineSnackBar.showConfirmationDialog(
         context: context,

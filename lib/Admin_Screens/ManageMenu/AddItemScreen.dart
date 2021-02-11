@@ -15,7 +15,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class AddItemScreen extends StatefulWidget {
-  Category category;
+  final Category category;
   final Function updateParent;
   AddItemScreen(this.category, this.updateParent);
 
@@ -53,12 +53,14 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       _field(
                         context: context,
                         hint: 'Item name',
+                        validator: (val) => Validations.isEmptyValidation(val),
                         onChanged: (value) => foodItem.setName(value),
                       ),
                       SizedBox(height: 20),
                       _field(
                         context: context,
                         hint: 'Description',
+                        validator: (val) => Validations.isEmptyValidation(val),
                         maxLines: 3,
                         onChanged: (value) => foodItem.setDescription(value),
                       ),
@@ -69,6 +71,11 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         context: context,
                         isNumber: true,
                         hint: 'Price',
+                        validator: (String val) {
+                          return (double.tryParse(val) == null)
+                              ? 'must be in the format of 0.00'
+                              : null;
+                        },
                         onChanged: (value) =>
                             foodItem.setPrice(double.tryParse(value)),
                       ),
@@ -87,9 +94,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             }
                             try {
                               widget.category.getItems().add(foodItem);
-                              await Provider.of<Restaurant>(context,
-                                      listen: false)
-                                  .updateOrCreate();
+                              await Provider.of<Restaurant>(
+                                context,
+                                listen: false,
+                              ).updateOrCreate();
                               widget.updateParent();
                               Navigator.pop(context);
                             } on PlatformException catch (exception) {
@@ -130,20 +138,18 @@ class _AddItemScreenState extends State<AddItemScreen> {
     );
   }
 
-  Widget _field(
-      {Function onChanged,
-      context,
-      String hint,
-      int maxLines = 1,
-      bool isNumber = false}) {
+  Widget _field({
+    Function onChanged,
+    context,
+    String hint,
+    int maxLines = 1,
+    bool isNumber = false,
+    Function validator,
+  }) {
     return SafeDineField(
       color: Colors.grey[300],
       isNumber: isNumber,
-      validator: (String val) {
-        if (val.contains('-') || val.contains(',') || val.contains(' '))
-          return 'must be in the format of 0.00';
-        return Validations.isEmptyValidation(val);
-      },
+      validator: validator,
       hintText: hint,
       maxLines: maxLines,
       enabled: true,

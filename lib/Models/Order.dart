@@ -109,7 +109,7 @@ class Order implements DatabaseModel {
 
   String getVisitorID() => _visitorID ?? '';
 
-  List<ItemDetails> getItemDetails() => _itemDetails ?? [];
+  List<ItemDetails> getItemDetails() => _itemDetails ?? (_itemDetails = []);
 
   String getDate() => _date ?? 'Unknown';
 

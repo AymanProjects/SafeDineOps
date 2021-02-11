@@ -34,9 +34,9 @@ class ItemDetails with ChangeNotifier {
     );
   }
 
-  FoodItem getItem() => _item ?? FoodItem();
+  FoodItem getItem() => _item ?? (_item = FoodItem());
   int getQuantity() => _quantity ?? 1;
-  List<AddOn> getSelectedAddOns() => _selectedAddOns ?? [];
+  List<AddOn> getSelectedAddOns() => _selectedAddOns ?? (_selectedAddOns = []);
 
   addSelectedAddOn(AddOn addon) {
     _selectedAddOns.add(addon);
@@ -61,7 +61,7 @@ class ItemDetails with ChangeNotifier {
   }
 
   increaseQuantityBy(int value) {
-    _quantity+=value;
+    _quantity += value;
     notifyListeners();
   }
 

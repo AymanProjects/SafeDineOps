@@ -22,7 +22,7 @@ class GlobalScaffold extends StatelessWidget {
     return Scaffold(
         drawerScrimColor: Colors.black12,
         drawerEdgeDragWidth: 30,
-        drawer: hasDrawer ? drawer : SizedBox(),
+        drawer: drawer,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           titleSpacing: 15.w,
@@ -62,7 +62,7 @@ class GlobalScaffold extends StatelessWidget {
             height: 50,
             child: Text(
               title,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.sp),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
           ),
           body,

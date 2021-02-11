@@ -44,12 +44,14 @@ class _CategoryDropDownState extends State<CategoryDropDown> {
           ),
           onTap: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => Provider<Restaurant>.value(
-                        value: restaurant,
-                        child: AddItemScreen(
-                            widget.category, widget.updateParent))));
+              context,
+              MaterialPageRoute(
+                builder: (_) => Provider<Restaurant>.value(
+                  value: restaurant,
+                  child: AddItemScreen(widget.category, widget.updateParent),
+                ),
+              ),
+            );
           },
         ),
         SizedBox(width: 10),
