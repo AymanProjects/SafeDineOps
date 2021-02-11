@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:SafeDineOps/Admin_Screens/ManageMenu/widgets/AddOnsList.dart';
 import 'package:SafeDineOps/Models/Category.dart';
 import 'package:SafeDineOps/Models/FoodItem.dart';
 import 'package:SafeDineOps/Models/Restaurant.dart';
@@ -13,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'widgets/AddOnsList.dart';
 
 class AddItemScreen extends StatefulWidget {
   final Category category;

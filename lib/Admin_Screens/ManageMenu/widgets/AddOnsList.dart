@@ -1,9 +1,5 @@
-import 'package:SafeDineOps/Utilities/Validations.dart';
 import 'package:flutter/material.dart';
 import '../../../Models/AddOn.dart';
-import '../../../Models/AddOn.dart';
-import '../../../Widgets/BorderedButton.dart';
-import '../../../Widgets/SafeDineField.dart';
 
 class AddOnsList extends StatefulWidget {
   final List<AddOn> addons;
