@@ -8,6 +8,7 @@ enum OrderStatus {
   BeingPrepared,
   Served,
   Cancelled,
+  New
 }
 
 class Order implements DatabaseModel {

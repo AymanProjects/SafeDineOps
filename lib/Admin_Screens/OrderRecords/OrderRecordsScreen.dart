@@ -20,11 +20,10 @@ class OrderRecordsScreen extends StatelessWidget {
   }
 
   Widget showRecords(context) {
-    return FutureBuilder<List<Order>>(
-      initialData: [],
-      future: Database.getAllOrdersOfBranch(branchID),
+    return StreamBuilder<List<Order>>(
+      stream: Database.getAllOrdersOfBranch(branchID: branchID),
       builder: (_, AsyncSnapshot<List<Order>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.connectionState == ConnectionState.active) {
            if (snapshot.data.length > 0)
             return recordsList(snapshot.data);
           else

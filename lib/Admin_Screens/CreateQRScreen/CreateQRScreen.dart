@@ -26,7 +26,7 @@ class CreateQRScreen extends StatelessWidget {
           future: Database.getBranchesOfRestaurant(restaurant.getID()),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.data.length < 1) {
+              if (!snapshot.hasData || snapshot.data.length < 1) {
                 return showEmptyBranches();
               }
               return SingleChildScrollView(
