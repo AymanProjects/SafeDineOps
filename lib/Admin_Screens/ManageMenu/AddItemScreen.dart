@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:SafeDineOps/Admin_Screens/ManageMenu/widgets/AddOnsList.dart';
 import 'package:SafeDineOps/Models/Category.dart';
 import 'package:SafeDineOps/Models/FoodItem.dart';
 import 'package:SafeDineOps/Models/Restaurant.dart';
@@ -79,6 +80,9 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         onChanged: (value) =>
                             foodItem.setPrice(double.tryParse(value)),
                       ),
+                      AddOnsList(
+                        addons: foodItem.getAddOns(),
+                      ),
                       SizedBox(height: 20),
                       BorderedButton(
                         text: 'Add Item',
@@ -114,6 +118,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           });
                         },
                       ),
+                      SizedBox(height: 20),
                     ],
                   ),
                 ),
