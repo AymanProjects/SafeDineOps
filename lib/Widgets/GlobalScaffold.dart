@@ -55,7 +55,8 @@ class GlobalScaffold extends StatelessWidget {
             ),
           ),
         ),
-        body: Column(children: [
+        body: Column(
+          children: [
           Container(
             alignment: Alignment.topLeft,
             padding: EdgeInsets.symmetric(horizontal: 15.w),

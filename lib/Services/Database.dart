@@ -91,21 +91,17 @@ class Database {
     return branches;
   }
 
-  static Future<List<Order>> getAllOrdersOfBranch(String branchID) async {
-    print(branchID);
-    List<Order> orders = await Firestore.instance
+  static Stream<List<Order>> getAllOrdersOfBranch({String branchID,String status}) {
+    return Firestore.instance
         .collection(ordersCollection)
         .where('branchID', isEqualTo: branchID)
+        .where('status', isEqualTo: status)
         .orderBy('date', descending: true)
-        .getDocuments()
-        .then((QuerySnapshot queryResult) {
-      if (queryResult.documents.isNotEmpty)
-        return queryResult.documents.map((DocumentSnapshot document) {
-          return Order().fromJson(document.data);
-        }).toList();
-      else
-        return [];
+        .snapshots()
+        .map((QuerySnapshot snapshot) {
+      return snapshot.documents.map((document) {
+        return Order().fromJson(document.data);
+      }).toList();
     });
-    return orders;
   }
 }

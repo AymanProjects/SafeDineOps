@@ -2,6 +2,7 @@ import 'package:SafeDineOps/Admin_Screens/Authentication/OTPScreen.dart';
 import 'package:SafeDineOps/Models/Branch.dart';
 import 'package:SafeDineOps/Models/Restaurant.dart';
 import 'package:SafeDineOps/Services/FirebaseException.dart';
+import 'package:SafeDineOps/Staff_Screens/SelectBranchScreen.dart';
 import 'package:SafeDineOps/Staff_Screens/StaffHomeScreen.dart';
 import 'package:SafeDineOps/Utilities/Validations.dart';
 import 'package:SafeDineOps/Widgets/SafeDineButton.dart';
@@ -200,8 +201,6 @@ class _AuthPageViewState extends State<AuthPageView> {
   void buttonPressed(context) async {
     Restaurant restaurant = new Restaurant(
         email: _email, password: _password, name: _restaurantName);
-    Branch branch;
-
     if (_formKey.currentState.validate()) {
       setState(() {
         _loading = true;
@@ -216,9 +215,6 @@ class _AuthPageViewState extends State<AuthPageView> {
         restaurant = await Restaurant()
             .fetch(restaurant.id); //fetch res. document anyway
 
-        if (!_isAdmin) // if not admin then also fetch branch document
-          branch = await Branch().fetch(restaurant.id);
-
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -227,8 +223,7 @@ class _AuthPageViewState extends State<AuthPageView> {
                 value: restaurant,
                 builder: (_, __) => _isAdmin
                     ? OTPScreen()
-                    : Provider<Branch>.value(
-                        value: branch, child: StaffHomeScreen()),
+                    :  SelectBranchScreen(),
               );
             },
           ),

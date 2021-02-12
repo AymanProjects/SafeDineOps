@@ -2,17 +2,20 @@ import 'package:SafeDineOps/Admin_Screens/Home/widgets/SafeDineDrawer.dart';
 import 'package:SafeDineOps/Models/Branch.dart';
 import 'package:SafeDineOps/Models/Order.dart';
 import 'package:SafeDineOps/Services/Database.dart';
+import 'package:SafeDineOps/Services/FirebaseException.dart';
 import 'package:SafeDineOps/Staff_Screens/widgets/OrderCard.dart';
 import 'package:SafeDineOps/Widgets/GlobalScaffold.dart';
+import 'package:SafeDineOps/Widgets/SafeDineSnackBar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-class StaffHomeScreen extends StatelessWidget {
+class CashierHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Branch branch = Provider.of<Branch>(context, listen: false);
     return GlobalScaffold(
-      title: '${branch.getName()}, Branch',
+      title: '${branch.getName()}, Cashier',
       hasDrawer: true,
       drawer: SafeDineDrawer(),
       body: getBranchOrders(branch: branch),
@@ -21,15 +24,14 @@ class StaffHomeScreen extends StatelessWidget {
 
   Widget getBranchOrders({Branch branch}) {
     return StreamBuilder<List<Order>>(
-      stream: Database.getAllOrdersOfBranch(branchID: branch.getID(), status: 'BeingPrepared'),
+      stream: Database.getAllOrdersOfBranch(branchID: branch.getID(), status: 'New'),
       builder: (_, AsyncSnapshot<List<Order>> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           if (snapshot.hasData && snapshot.data.length > 0)
             return showActiveOrders(snapshot.data);
           else
             return showNoOrders();
-        }
-        else {
+        } else {
           return Expanded(
             child: Center(child: CircularProgressIndicator()),
           );
@@ -49,13 +51,16 @@ class StaffHomeScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           return OrderCard(
             order: activeOrders[index],
-            positiveAction: ()async{
-              activeOrders[index].setStatus(OrderStatus.Served.toString());
+            positiveActionText: 'Accept',
+            positiveAction: () async {
+              print('test');
+              activeOrders[index].setStatus(OrderStatus.BeingPrepared.toString());
               await activeOrders[index].updateOrCreate();
             },
-            positiveActionText: 'Done!',
-            negativeAction: null,
-            negativeActionText: '',
+            negativeActionText: 'Reject',
+            negativeAction: () {
+              showConfirmationDialog(context: context,order: activeOrders[index]);
+            },
           );
         },
       ),
@@ -70,6 +75,37 @@ class StaffHomeScreen extends StatelessWidget {
           style: TextStyle(color: Colors.grey),
         ),
       ),
+    );
+  }
+
+  showConfirmationDialog({context, Order order}) {
+    SafeDineSnackBar.showConfirmationDialog(
+      message: 'Do you really want to reject this order? \n',
+      context: context,
+      positiveActionText: Text(
+        'Yes',
+        style: TextStyle(color: Colors.red, fontSize: 14),
+      ),
+      positiveAction: () async {
+        try {
+          order.setStatus(OrderStatus.Cancelled.toString());
+          await order.updateOrCreate();
+        } on PlatformException catch (exception) {
+          String msg = FirebaseException.generateReadableMessage(exception);
+          SafeDineSnackBar.showNotification(
+            type: SnackbarType.Error,
+            context: context,
+            msg: msg,
+          );
+        }
+      },
+      negativeActionText: Text(
+        'No',
+        style: TextStyle(fontSize: 14),
+      ),
+      negativeAction: () {
+        // no code needed
+      },
     );
   }
 }
