@@ -108,9 +108,7 @@ class OrderCard extends StatelessWidget {
         'No',
         style: TextStyle(fontSize: 14),
       ),
-      negativeAction: () {
-        // no code needed
-      },
+      negativeAction: null,
     );
   }
 

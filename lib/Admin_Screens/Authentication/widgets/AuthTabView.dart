@@ -132,9 +132,7 @@ class _AuthPageViewState extends State<AuthPageView> {
                                 'Cancel',
                                 style: TextStyle(color: Colors.grey),
                               ),
-                              negativeAction: () {
-                                Navigator.pop(context);
-                              },
+                              negativeAction: null,
                               positiveActionText: Text(
                                 'Send',
                                 style: TextStyle(

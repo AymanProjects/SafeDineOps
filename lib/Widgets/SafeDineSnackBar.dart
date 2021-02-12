@@ -27,7 +27,7 @@ class SafeDineSnackBar {
     showFlash(
       transitionDuration: Duration(milliseconds: 200),
       context: context,
-      persistent: true,
+      persistent: false,
       builder: (context, controller) {
         return StatefulBuilder(
           builder: (context, setState) {
@@ -174,7 +174,7 @@ class SafeDineSnackBar {
       );
     },
         duration: Duration(seconds: duration),
-        persistent: true,
+        persistent: false,
         transitionDuration: Duration(milliseconds: 400));
     _previousController.show();
   }
@@ -197,7 +197,7 @@ class SafeDineSnackBar {
     showFlash(
       transitionDuration: Duration(milliseconds: 200),
       context: context,
-      persistent: true,
+      persistent: false,
       builder: (context, controller) {
         return StatefulBuilder(
           builder: (context, setState) {
