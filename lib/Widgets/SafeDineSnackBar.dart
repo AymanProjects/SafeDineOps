@@ -131,7 +131,7 @@ class SafeDineSnackBar {
       IconData icon,
       Function ontap}) {
     if (_previousController?.isDisposed == false) _previousController.dismiss();
-    _previousController = FlashController(context, (context, controller) {
+    _previousController = FlashController(context, (_context, controller) {
       return Flash(
         controller: controller,
         onTap: ontap,

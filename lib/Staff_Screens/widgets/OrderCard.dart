@@ -1,28 +1,30 @@
+import 'package:SafeDineOps/Models/AddOn.dart';
 import 'package:SafeDineOps/Models/ItemDetails.dart';
 import 'package:SafeDineOps/Models/Order.dart';
-import 'package:SafeDineOps/Services/FirebaseException.dart';
-import 'package:SafeDineOps/Utilities/AppTheme.dart';
-import 'package:SafeDineOps/Widgets/SafeDineSnackBar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 
 class OrderCard extends StatelessWidget {
-  String positiveActionText;
-  String negativeActionText;
-  Function positiveAction;
-  Function negativeAction;
+  final String positiveActionText;
+  final String negativeActionText;
+  final Function positiveAction;
+  final Function negativeAction;
+  final bool isSummarized;
   final Order order;
-  OrderCard({this.order, this.positiveAction, this.negativeAction, this.positiveActionText, this.negativeActionText});
+  OrderCard(
+      {@required this.order,
+      this.isSummarized = false,
+      @required this.positiveAction,
+      @required this.negativeAction,
+      this.positiveActionText = '',
+      this.negativeActionText = ''});
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(7.w),
+        borderRadius: BorderRadius.circular(7),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,37 +59,21 @@ class OrderCard extends StatelessWidget {
             ],
           ),
           Divider(
-            color: Provider.of<AppTheme>(context).grey,
+            color: Colors.grey,
             height: 30,
-          ),
-          Text(
-            "Order Details:",
-            style: TextStyle(
-              fontSize: 16,
-            ),
           ),
           SizedBox(
             height: 5,
           ),
-          Container(
-            width: 210,
-            child: Text(
-              getItemsNames(order.getItemDetails()),
-              style: TextStyle(
-                fontSize: 14,
-                color: Provider.of<AppTheme>(context).grey,
-              ),
-            ),
-          ),
+          isSummarized ? summarizedDetails() : detailedDetails(),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              order.getPaymentType() == 'cash'
+              negativeAction != null
                   ? InkWell(
-                      child:
-                          Text(negativeActionText, style: TextStyle(color: Colors.red)),
+                      child: Text(negativeActionText,
+                          style: TextStyle(color: Colors.red)),
                       onTap: () {
-                        // showConfirmationDialog(context, order);
                         negativeAction();
                       },
                     )
@@ -96,11 +82,9 @@ class OrderCard extends StatelessWidget {
                 width: 10,
               ),
               InkWell(
-                child:
-                    Text(positiveActionText, style: TextStyle(color: Colors.green[800])),
+                child: Text(positiveActionText,
+                    style: TextStyle(color: Colors.green[800])),
                 onTap: () async {
-                  // order.setStatus(OrderStatus.Served.toString());
-                  // await order.updateOrCreate();
                   positiveAction();
                 },
               )
@@ -111,74 +95,80 @@ class OrderCard extends StatelessWidget {
     );
   }
 
-  // showConfirmationDialog(context, order) {
-  //   SafeDineSnackBar.showConfirmationDialog(
-  //     message: 'Do you really want to cancel this order? \n',
-  //     context: context,
-  //     positiveActionText: Text(
-  //       'Yes',
-  //       style: TextStyle(color: Colors.red, fontSize: 14),
-  //     ),
-  //     positiveAction: () async {
-  //       try {
-  //         order.setStatus(OrderStatus.Cancelled.toString());
-  //         await order.updateOrCreate();
-  //       } on PlatformException catch (exception) {
-  //         String msg = FirebaseException.generateReadableMessage(exception);
-  //         SafeDineSnackBar.showNotification(
-  //           type: SnackbarType.Error,
-  //           context: context,
-  //           msg: msg,
-  //         );
-  //       }
-  //     },
-  //     negativeActionText: Text(
-  //       'No',
-  //       style: TextStyle(fontSize: 14),
-  //     ),
-  //     negativeAction: () {
-  //       // no code needed
-  //       _showMyDialog(context, order);
-  //     },
-  //   );
-  // }
+  Widget summarizedDetails() {
+    return Container(
+      width: 210,
+      child: Text(
+        getItemsNamesAndQuantity(order.getItemDetails()),
+      ),
+    );
+  }
 
-  String getItemsNames(List<ItemDetails> itemDetails) {
+  Widget detailedDetails() {
+    return Container(
+      width: 210,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AbsorbPointer(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: order.getItemDetails().length,
+              itemBuilder: (context, index) {
+                ItemDetails itemDetails = order.getItemDetails()[index];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${itemDetails.getQuantity()}x ${itemDetails.getItem().getName()}',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(height: 2),
+                    itemDetails.getSelectedAddOns().length > 1
+                        ? Text(
+                            getAddonsNames(itemDetails.getSelectedAddOns()),
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          )
+                        : SizedBox(),
+                    SizedBox(height: 10),
+                  ],
+                );
+              },
+            ),
+          ),
+          Text(
+            'Notes',
+            style:
+                TextStyle(fontWeight: FontWeight.w600, color: Colors.blue[700]),
+          ),
+          SizedBox(height: 2),
+          Text(
+            order.getNote().isEmpty ? 'No notes' : order.getNote(),
+            style: TextStyle(
+              color: Colors.grey,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String getAddonsNames(List<AddOn> addons) {
     String names = '';
-    for (ItemDetails item in itemDetails) {
-      names += ', ${item.getItem().getName()}';
+    for (AddOn addon in addons) {
+      names += ', ${addon.getName()}';
     }
     if (names.length > 0) names = names.substring(2); // remove the first coma ,
     return names;
   }
 
-
-  Future<void> _showMyDialog(context, Order order) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        scrollable: true,
-        title: Text('AlertDialog Title'),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Text('This is a demo alert dialog.'),
-            ],
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: Text('Approve'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
-
+  String getItemsNamesAndQuantity(List<ItemDetails> itemDetails) {
+    String names = '';
+    for (ItemDetails item in itemDetails) {
+      names += '${item.getQuantity()}x ${item.getItem().getName()}\n';
+    }
+    return names;
+  }
 }

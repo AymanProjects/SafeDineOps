@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:SafeDineOps/Models/Restaurant.dart';
 import 'package:SafeDineOps/Widgets/SafeDineSnackBar.dart';

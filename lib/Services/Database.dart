@@ -91,11 +91,11 @@ class Database {
     return branches;
   }
 
-  static Stream<List<Order>> getAllOrdersOfBranch({String branchID,String status}) {
+  static Stream<List<Order>> getAllOrdersOfBranchWhere({String branchID,List<String> status}) {
     return Firestore.instance
         .collection(ordersCollection)
         .where('branchID', isEqualTo: branchID)
-        .where('status', isEqualTo: status)
+        .where('status', whereIn: status)
         .orderBy('date', descending: true)
         .snapshots()
         .map((QuerySnapshot snapshot) {

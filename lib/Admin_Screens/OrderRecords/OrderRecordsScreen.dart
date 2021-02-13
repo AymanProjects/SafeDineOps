@@ -21,10 +21,10 @@ class OrderRecordsScreen extends StatelessWidget {
 
   Widget showRecords(context) {
     return StreamBuilder<List<Order>>(
-      stream: Database.getAllOrdersOfBranch(branchID: branchID),
+      stream: Database.getAllOrdersOfBranchWhere(branchID: branchID),
       builder: (_, AsyncSnapshot<List<Order>> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
-           if (snapshot.data.length > 0)
+          if (snapshot.data.length > 0)
             return recordsList(snapshot.data);
           else
             return showEmptyRecords();
@@ -108,18 +108,6 @@ class OrderRecordsScreen extends StatelessWidget {
                     color: Provider.of<AppTheme>(context).grey,
                   ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    "${order.getRestaurantName()}",
-                    style: TextStyle(
-                      color:
-                          Provider.of<AppTheme>(context, listen: false).primary,
-                    ),
-                  )
-                ],
               ),
             ],
           ),

@@ -12,7 +12,10 @@ class Notifications {
         .snapshots()
         .map(
       (QuerySnapshot snapshot) {
-        return snapshot.documents?.first?.data['message'] ?? '';
+        if (snapshot.documents.length > 0)
+          return snapshot.documents.first.data['message'];
+        else
+          return null;
       },
     );
   }
@@ -26,20 +29,3 @@ class Notifications {
     });
   }
 }
-
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   bool firstNotification = true;
-  //   super.initState();
-  //   Notifications.getBranchNotifications(branchID: 'aaa').listen((data) {
-  //     if (!firstNotification) {
-  //       SafeDineSnackBar.showNotification(
-  //         type: SnackbarType.Warning,
-  //         context: context,
-  //         msg: data,
-  //         duration: 100,
-  //       );
-  //     }else firstNotification = false;
-  //   }, cancelOnError: false);
-  // }

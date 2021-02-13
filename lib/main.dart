@@ -1,5 +1,4 @@
 import 'package:SafeDineOps/Admin_Screens/Authentication/AuthScreen.dart';
-import 'package:SafeDineOps/Admin_Screens/Home/AdminHomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'AppStyleConfiguration.dart';

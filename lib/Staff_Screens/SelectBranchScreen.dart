@@ -1,9 +1,7 @@
-import 'package:SafeDineOps/Admin_Screens/Home/widgets/SafeDineDrawer.dart';
 import 'package:SafeDineOps/Models/Branch.dart';
 import 'package:SafeDineOps/Models/Restaurant.dart';
 import 'package:SafeDineOps/Services/Database.dart';
 import 'package:SafeDineOps/Staff_Screens/StaffHomeScreen.dart';
-import 'package:SafeDineOps/Staff_Screens/StaffSelectScreen.dart';
 import 'package:SafeDineOps/Widgets/GlobalScaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,8 +12,7 @@ class SelectBranchScreen extends StatelessWidget {
     Restaurant res = Provider.of<Restaurant>(context, listen: false);
     return GlobalScaffold(
       title: 'Select branch to enter',
-      hasDrawer: true,
-      drawer: SafeDineDrawer(),
+      hasDrawer: false,
       body: FutureBuilder<List<Branch>>(
         future: Database.getBranchesOfRestaurant(res.getID()),
         builder: (context, snapshot) {
@@ -49,7 +46,7 @@ class SelectBranchScreen extends StatelessWidget {
                                           value: res,
                                         ),
                                       ],
-                                      child: StaffSelectScreen(),
+                                      child: StaffHomeScreen(),
                                     ),
                                   ));
                             },

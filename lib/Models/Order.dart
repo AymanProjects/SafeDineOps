@@ -8,7 +8,7 @@ enum OrderStatus {
   BeingPrepared,
   Served,
   Cancelled,
-  New
+  Pending,
 }
 
 class Order implements DatabaseModel {
@@ -137,6 +137,7 @@ class Order implements DatabaseModel {
   setRestaurantName(String value) {
     _restaurantName = value;
   }
+
   setNote(String value) {
     _note = value;
   }
