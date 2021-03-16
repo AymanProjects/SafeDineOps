@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:SafeDineOps/Admin_Screens/OrderRecords/OrderRecordsScreen.dart';
+import 'package:SafeDineOps/Models/Branch.dart';
 import 'package:SafeDineOps/Models/Restaurant.dart';
 import 'package:SafeDineOps/Admin_Screens/Home/widgets/DrawerTile.dart';
 import 'package:SafeDineOps/Utilities/AppTheme.dart';
@@ -47,11 +48,15 @@ class SafeDineDrawer extends StatelessWidget {
                         text: 'Order history',
                         icon: CupertinoIcons.time,
                         onTap: () {
+                          Branch branch = Provider.of<Branch>(context, listen: false);
                           Navigator.of(context).pop();
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => OrderRecordsScreen()),
+                              builder: (context) => OrderRecordsScreen(
+                                branchID: branch.getID(),
+                              ),
+                            ),
                           );
                         },
                       )
