@@ -35,7 +35,6 @@ class QRImageState extends State<QRImage> {
             type: SnackbarType.Success,
             context: context,
             msg: 'Image Downloaded to Gallery');
-        Navigator.pop(context);
       } on DioError catch (exception) {
         SafeDineSnackBar.showNotification(
           type: SnackbarType.Error,
